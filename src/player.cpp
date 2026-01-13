@@ -9,8 +9,8 @@ class Player {
 private:
   Vector2 pos;
   Vector2 dashVec;
-  float speed = 300.f;
-  float dashLength = 300.f;
+  const float speed = 300.f;
+  const float dashLength = 300.f;
   Texture2D texture;
 
   std::string debugText = "";
@@ -26,10 +26,10 @@ public:
       Vector2 delta = Vector2Scale(dashVec, dt * 0.1 * dashLen);
       this->pos = Vector2Add(pos, delta);
       this->dashVec = Vector2Subtract(dashVec, delta);
-
-      if (dashLen < 100) {
-        dashVec = {0, 0};
-      }
+    }
+    if (dashLen < 100) {
+      dashVec = {0, 0};
+      pos = {std::round(pos.x/4) * 4, std::round(pos.y/4) * 4};
     }
   }
 
@@ -46,5 +46,9 @@ public:
   void dash(Vector2 dir) {
     dir = Vector2Normalize(dir);
     this->dashVec = Vector2Scale(dir, dashLength);
+  }
+
+  void unload() {
+    UnloadTexture(texture);
   }
 };

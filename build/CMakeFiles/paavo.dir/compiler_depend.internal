@@ -3,6 +3,7 @@
 
 CMakeFiles/paavo.dir/src/main.cpp.o
  /home/matt/Programming/paavo/src/main.cpp
+ /home/matt/Programming/paavo/src/object.cpp
  /home/matt/Programming/paavo/src/player.cpp
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h

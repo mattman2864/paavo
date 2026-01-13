@@ -1,11 +1,13 @@
 #include <raylib.h>
 #include "player.cpp"
+#include "object.cpp"
 
 int main()
 {
   InitWindow(1200, 800, "PAAVO");
 
   Player p = Player(100, 100);
+  Object o = Object("assets/objects/rocks/rock.png", {200, 200}, {100, 100});
 
   while (!WindowShouldClose())
   {
@@ -25,9 +27,12 @@ int main()
 
     DrawFPS(2, 0);
     p.draw();
+    o.draw();
 
     EndDrawing();
   }
+  p.unload();
+  o.unload();
 
   return 0;
 }
