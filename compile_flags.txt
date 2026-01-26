@@ -1,0 +1,4 @@
+-I/usr/include
+-I/usr/local/include
+-I/home/matt/libs/raylib
+-lraylib

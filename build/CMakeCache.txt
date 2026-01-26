@@ -54,7 +54,7 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //C compiler
-CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
+CMAKE_C_COMPILER:STRING=/usr/bin/cc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -216,6 +216,24 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
+MyRaylibProject_BINARY_DIR:STATIC=/home/matt/Programming/paavo/build
+
+//Value Computed by CMake
+MyRaylibProject_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+MyRaylibProject_SOURCE_DIR:STATIC=/home/matt/Programming/paavo
+
+//Value Computed by CMake
+my_raylib_project_BINARY_DIR:STATIC=/home/matt/Programming/paavo/build
+
+//Value Computed by CMake
+my_raylib_project_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+my_raylib_project_SOURCE_DIR:STATIC=/home/matt/Programming/paavo
+
+//Value Computed by CMake
 paavo_BINARY_DIR:STATIC=/home/matt/Programming/paavo/build
 
 //Value Computed by CMake
@@ -225,7 +243,7 @@ paavo_IS_TOP_LEVEL:STATIC=ON
 paavo_SOURCE_DIR:STATIC=/home/matt/Programming/paavo
 
 //The directory containing a CMake configuration file for raylib.
-raylib_DIR:PATH=/usr/local/lib/cmake/raylib
+raylib_DIR:PATH=/usr/local/lib64/cmake/raylib
 
 //Value Computed by CMake
 raylib_app_BINARY_DIR:STATIC=/home/matt/Programming/paavo/build
@@ -250,9 +268,9 @@ CMAKE_CACHEFILE_DIR:INTERNAL=/home/matt/Programming/paavo/build
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=28
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=31
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=3
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=10
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
@@ -295,6 +313,8 @@ CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_DLLTOOL
 CMAKE_DLLTOOL-ADVANCED:INTERNAL=1
+//Path to cache edit program executable.
+CMAKE_EDIT_COMMAND:INTERNAL=/usr/bin/ccmake
 //Executable file format
 CMAKE_EXECUTABLE_FORMAT:INTERNAL=ELF
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS
@@ -353,7 +373,7 @@ CMAKE_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_READELF
 CMAKE_READELF-ADVANCED:INTERNAL=1
 //Path to CMake installation.
-CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.28
+CMAKE_ROOT:INTERNAL=/usr/share/cmake
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG

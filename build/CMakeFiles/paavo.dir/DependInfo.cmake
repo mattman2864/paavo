@@ -8,7 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/matt/Programming/paavo/src/main.cpp" "CMakeFiles/paavo.dir/src/main.cpp.o" "gcc" "CMakeFiles/paavo.dir/src/main.cpp.o.d"
+  "/home/matt/Programming/paavo/src/body.c" "CMakeFiles/paavo.dir/src/body.c.o" "gcc" "CMakeFiles/paavo.dir/src/body.c.o.d"
+  "/home/matt/Programming/paavo/src/main.c" "CMakeFiles/paavo.dir/src/main.c.o" "gcc" "CMakeFiles/paavo.dir/src/main.c.o.d"
+  "/home/matt/Programming/paavo/src/player.c" "CMakeFiles/paavo.dir/src/player.c.o" "gcc" "CMakeFiles/paavo.dir/src/player.c.o.d"
+  "" "paavo" "gcc" "CMakeFiles/paavo.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
