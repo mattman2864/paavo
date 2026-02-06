@@ -1,1 +1,1 @@
-/usr/bin/cc -Wl,--dependency-file=CMakeFiles/paavo.dir/link.d CMakeFiles/paavo.dir/src/main.c.o CMakeFiles/paavo.dir/src/player.c.o CMakeFiles/paavo.dir/src/body.c.o -o paavo  -Wl,-rpath,/usr/local/lib64 /usr/local/lib64/libraylib.so.5.5.0 -lm -lpthread -ldl -lrt
+/usr/bin/c++ CMakeFiles/paavo.dir/src/main.cpp.o -o paavo  /home/matt/libs/raylib/install/lib/libraylib.a -lm 

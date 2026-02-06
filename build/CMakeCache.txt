@@ -243,7 +243,7 @@ paavo_IS_TOP_LEVEL:STATIC=ON
 paavo_SOURCE_DIR:STATIC=/home/matt/Programming/paavo
 
 //The directory containing a CMake configuration file for raylib.
-raylib_DIR:PATH=/usr/local/lib64/cmake/raylib
+raylib_DIR:PATH=raylib_DIR-NOTFOUND
 
 //Value Computed by CMake
 raylib_app_BINARY_DIR:STATIC=/home/matt/Programming/paavo/build
@@ -268,9 +268,9 @@ CMAKE_CACHEFILE_DIR:INTERNAL=/home/matt/Programming/paavo/build
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=3
 //Minor version of cmake used to create the current loaded cache
-CMAKE_CACHE_MINOR_VERSION:INTERNAL=31
+CMAKE_CACHE_MINOR_VERSION:INTERNAL=28
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=10
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=3
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
@@ -373,7 +373,7 @@ CMAKE_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_READELF
 CMAKE_READELF-ADVANCED:INTERNAL=1
 //Path to CMake installation.
-CMAKE_ROOT:INTERNAL=/usr/share/cmake
+CMAKE_ROOT:INTERNAL=/usr/share/cmake-3.28
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS
 CMAKE_SHARED_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_SHARED_LINKER_FLAGS_DEBUG

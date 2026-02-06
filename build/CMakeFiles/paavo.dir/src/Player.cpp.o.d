@@ -1,7 +1,9 @@
-CMakeFiles/paavo.dir/src/main.cpp.o: \
- /home/matt/Programming/paavo/src/main.cpp /usr/include/stdc-predef.h \
+CMakeFiles/paavo.dir/src/Player.cpp.o: \
+ /home/matt/Programming/paavo/src/Player.cpp /usr/include/stdc-predef.h \
+ /home/matt/Programming/paavo/src/Components.hpp \
  /home/matt/libs/raylib/install/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
+ /home/matt/Programming/paavo/src/GameObject.hpp \
  /home/matt/libs/raylib/install/include/raymath.h \
  /usr/include/c++/13/math.h /usr/include/c++/13/cmath \
  /usr/include/c++/13/bits/requires_hosted.h \
