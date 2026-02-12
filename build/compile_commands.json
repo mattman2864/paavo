@@ -1,8 +1,32 @@
 [
 {
   "directory": "/home/matt/Programming/paavo/build",
-  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -isystem /home/matt/libs/raylib/install/include -std=gnu++17 -o CMakeFiles/paavo.dir/src/main.cpp.o -c /home/matt/Programming/paavo/src/main.cpp",
+  "command": "/usr/bin/g++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -isystem /home/matt/libs/raylib/install/include -g -std=gnu++17 -o CMakeFiles/paavo.dir/src/main.cpp.o -c /home/matt/Programming/paavo/src/main.cpp",
   "file": "/home/matt/Programming/paavo/src/main.cpp",
   "output": "CMakeFiles/paavo.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/matt/Programming/paavo/build",
+  "command": "/usr/bin/g++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -isystem /home/matt/libs/raylib/install/include -g -std=gnu++17 -o CMakeFiles/paavo.dir/src/Body.cpp.o -c /home/matt/Programming/paavo/src/Body.cpp",
+  "file": "/home/matt/Programming/paavo/src/Body.cpp",
+  "output": "CMakeFiles/paavo.dir/src/Body.cpp.o"
+},
+{
+  "directory": "/home/matt/Programming/paavo/build",
+  "command": "/usr/bin/g++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -isystem /home/matt/libs/raylib/install/include -g -std=gnu++17 -o CMakeFiles/paavo.dir/src/Sprite.cpp.o -c /home/matt/Programming/paavo/src/Sprite.cpp",
+  "file": "/home/matt/Programming/paavo/src/Sprite.cpp",
+  "output": "CMakeFiles/paavo.dir/src/Sprite.cpp.o"
+},
+{
+  "directory": "/home/matt/Programming/paavo/build",
+  "command": "/usr/bin/g++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -isystem /home/matt/libs/raylib/install/include -g -std=gnu++17 -o CMakeFiles/paavo.dir/src/Input.cpp.o -c /home/matt/Programming/paavo/src/Input.cpp",
+  "file": "/home/matt/Programming/paavo/src/Input.cpp",
+  "output": "CMakeFiles/paavo.dir/src/Input.cpp.o"
+},
+{
+  "directory": "/home/matt/Programming/paavo/build",
+  "command": "/usr/bin/g++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -isystem /home/matt/libs/raylib/install/include -g -std=gnu++17 -o CMakeFiles/paavo.dir/src/Player.cpp.o -c /home/matt/Programming/paavo/src/Player.cpp",
+  "file": "/home/matt/Programming/paavo/src/Player.cpp",
+  "output": "CMakeFiles/paavo.dir/src/Player.cpp.o"
 }
 ]

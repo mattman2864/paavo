@@ -1,10 +1,9 @@
 CMakeFiles/paavo.dir/src/main.cpp.o: \
- /home/matt/Programming/paavo/src/main.cpp /usr/include/stdc-predef.h \
+ /home/matt/Programming/projects/games/paavo/src/main.cpp \
+ /usr/include/stdc-predef.h \
  /home/matt/libs/raylib/install/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- /home/matt/libs/raylib/install/include/raymath.h \
- /usr/include/c++/13/math.h /usr/include/c++/13/cmath \
- /usr/include/c++/13/bits/requires_hosted.h \
+ /usr/include/c++/13/cmath /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -87,4 +86,14 @@ CMakeFiles/paavo.dir/src/main.cpp.o: \
  /usr/include/c++/13/tr1/modified_bessel_func.tcc \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
- /usr/include/c++/13/tr1/riemann_zeta.tcc
+ /usr/include/c++/13/tr1/riemann_zeta.tcc /usr/include/c++/13/ctime \
+ /usr/include/time.h /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/timex.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /home/matt/libs/raylib/install/include/raymath.h \
+ /usr/include/c++/13/math.h \
+ /home/matt/Programming/projects/games/paavo/src/Player.h \
+ /home/matt/Programming/projects/games/paavo/src/Sprite.h \
+ /home/matt/Programming/projects/games/paavo/src/Body.h \
+ /home/matt/Programming/projects/games/paavo/src/Input.h

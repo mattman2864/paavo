@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/raylib_app.dir/src/main.cpp.o -o raylib_app  -Wl,-rpath,/usr/local/lib /usr/local/lib/libraylib.so.5.5.0 -lm 

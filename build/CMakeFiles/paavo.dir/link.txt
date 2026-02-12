@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/paavo.dir/src/main.cpp.o -o paavo  /home/matt/libs/raylib/install/lib/libraylib.a -lm 
+/usr/bin/c++ CMakeFiles/paavo.dir/src/main.cpp.o CMakeFiles/paavo.dir/src/Body.cpp.o CMakeFiles/paavo.dir/src/Sprite.cpp.o CMakeFiles/paavo.dir/src/Input.cpp.o CMakeFiles/paavo.dir/src/Player.cpp.o -o paavo  /home/matt/libs/raylib/install/lib/libraylib.a -lm 

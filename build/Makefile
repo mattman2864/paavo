@@ -57,18 +57,18 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/matt/Programming/paavo
+CMAKE_SOURCE_DIR = /home/matt/Programming/projects/games/paavo
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/matt/Programming/paavo/build
+CMAKE_BINARY_DIR = /home/matt/Programming/projects/games/paavo/build
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/matt/Programming/paavo/build/CMakeFiles /home/matt/Programming/paavo/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matt/Programming/projects/games/paavo/build/CMakeFiles /home/matt/Programming/projects/games/paavo/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/matt/Programming/paavo/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matt/Programming/projects/games/paavo/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,6 +129,102 @@ paavo/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/build
 .PHONY : paavo/fast
 
+src/Body.o: src/Body.cpp.o
+.PHONY : src/Body.o
+
+# target to build an object file
+src/Body.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Body.cpp.o
+.PHONY : src/Body.cpp.o
+
+src/Body.i: src/Body.cpp.i
+.PHONY : src/Body.i
+
+# target to preprocess a source file
+src/Body.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Body.cpp.i
+.PHONY : src/Body.cpp.i
+
+src/Body.s: src/Body.cpp.s
+.PHONY : src/Body.s
+
+# target to generate assembly for a file
+src/Body.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Body.cpp.s
+.PHONY : src/Body.cpp.s
+
+src/Input.o: src/Input.cpp.o
+.PHONY : src/Input.o
+
+# target to build an object file
+src/Input.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Input.cpp.o
+.PHONY : src/Input.cpp.o
+
+src/Input.i: src/Input.cpp.i
+.PHONY : src/Input.i
+
+# target to preprocess a source file
+src/Input.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Input.cpp.i
+.PHONY : src/Input.cpp.i
+
+src/Input.s: src/Input.cpp.s
+.PHONY : src/Input.s
+
+# target to generate assembly for a file
+src/Input.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Input.cpp.s
+.PHONY : src/Input.cpp.s
+
+src/Player.o: src/Player.cpp.o
+.PHONY : src/Player.o
+
+# target to build an object file
+src/Player.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Player.cpp.o
+.PHONY : src/Player.cpp.o
+
+src/Player.i: src/Player.cpp.i
+.PHONY : src/Player.i
+
+# target to preprocess a source file
+src/Player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Player.cpp.i
+.PHONY : src/Player.cpp.i
+
+src/Player.s: src/Player.cpp.s
+.PHONY : src/Player.s
+
+# target to generate assembly for a file
+src/Player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Player.cpp.s
+.PHONY : src/Player.cpp.s
+
+src/Sprite.o: src/Sprite.cpp.o
+.PHONY : src/Sprite.o
+
+# target to build an object file
+src/Sprite.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Sprite.cpp.o
+.PHONY : src/Sprite.cpp.o
+
+src/Sprite.i: src/Sprite.cpp.i
+.PHONY : src/Sprite.i
+
+# target to preprocess a source file
+src/Sprite.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Sprite.cpp.i
+.PHONY : src/Sprite.cpp.i
+
+src/Sprite.s: src/Sprite.cpp.s
+.PHONY : src/Sprite.s
+
+# target to generate assembly for a file
+src/Sprite.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/paavo.dir/build.make CMakeFiles/paavo.dir/src/Sprite.cpp.s
+.PHONY : src/Sprite.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -162,6 +258,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... paavo"
+	@echo "... src/Body.o"
+	@echo "... src/Body.i"
+	@echo "... src/Body.s"
+	@echo "... src/Input.o"
+	@echo "... src/Input.i"
+	@echo "... src/Input.s"
+	@echo "... src/Player.o"
+	@echo "... src/Player.i"
+	@echo "... src/Player.s"
+	@echo "... src/Sprite.o"
+	@echo "... src/Sprite.i"
+	@echo "... src/Sprite.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

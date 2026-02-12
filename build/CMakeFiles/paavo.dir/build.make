@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/matt/Programming/paavo
+CMAKE_SOURCE_DIR = /home/matt/Programming/projects/games/paavo
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/matt/Programming/paavo/build
+CMAKE_BINARY_DIR = /home/matt/Programming/projects/games/paavo/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/paavo.dir/depend.make
@@ -70,31 +70,95 @@ include CMakeFiles/paavo.dir/progress.make
 include CMakeFiles/paavo.dir/flags.make
 
 CMakeFiles/paavo.dir/src/main.cpp.o: CMakeFiles/paavo.dir/flags.make
-CMakeFiles/paavo.dir/src/main.cpp.o: /home/matt/Programming/paavo/src/main.cpp
+CMakeFiles/paavo.dir/src/main.cpp.o: /home/matt/Programming/projects/games/paavo/src/main.cpp
 CMakeFiles/paavo.dir/src/main.cpp.o: CMakeFiles/paavo.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/matt/Programming/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/paavo.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/paavo.dir/src/main.cpp.o -MF CMakeFiles/paavo.dir/src/main.cpp.o.d -o CMakeFiles/paavo.dir/src/main.cpp.o -c /home/matt/Programming/paavo/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/matt/Programming/projects/games/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/paavo.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/paavo.dir/src/main.cpp.o -MF CMakeFiles/paavo.dir/src/main.cpp.o.d -o CMakeFiles/paavo.dir/src/main.cpp.o -c /home/matt/Programming/projects/games/paavo/src/main.cpp
 
 CMakeFiles/paavo.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/paavo.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/matt/Programming/paavo/src/main.cpp > CMakeFiles/paavo.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/matt/Programming/projects/games/paavo/src/main.cpp > CMakeFiles/paavo.dir/src/main.cpp.i
 
 CMakeFiles/paavo.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/paavo.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/matt/Programming/paavo/src/main.cpp -o CMakeFiles/paavo.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/matt/Programming/projects/games/paavo/src/main.cpp -o CMakeFiles/paavo.dir/src/main.cpp.s
+
+CMakeFiles/paavo.dir/src/Body.cpp.o: CMakeFiles/paavo.dir/flags.make
+CMakeFiles/paavo.dir/src/Body.cpp.o: /home/matt/Programming/projects/games/paavo/src/Body.cpp
+CMakeFiles/paavo.dir/src/Body.cpp.o: CMakeFiles/paavo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/matt/Programming/projects/games/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/paavo.dir/src/Body.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/paavo.dir/src/Body.cpp.o -MF CMakeFiles/paavo.dir/src/Body.cpp.o.d -o CMakeFiles/paavo.dir/src/Body.cpp.o -c /home/matt/Programming/projects/games/paavo/src/Body.cpp
+
+CMakeFiles/paavo.dir/src/Body.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/paavo.dir/src/Body.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/matt/Programming/projects/games/paavo/src/Body.cpp > CMakeFiles/paavo.dir/src/Body.cpp.i
+
+CMakeFiles/paavo.dir/src/Body.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/paavo.dir/src/Body.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/matt/Programming/projects/games/paavo/src/Body.cpp -o CMakeFiles/paavo.dir/src/Body.cpp.s
+
+CMakeFiles/paavo.dir/src/Sprite.cpp.o: CMakeFiles/paavo.dir/flags.make
+CMakeFiles/paavo.dir/src/Sprite.cpp.o: /home/matt/Programming/projects/games/paavo/src/Sprite.cpp
+CMakeFiles/paavo.dir/src/Sprite.cpp.o: CMakeFiles/paavo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/matt/Programming/projects/games/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/paavo.dir/src/Sprite.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/paavo.dir/src/Sprite.cpp.o -MF CMakeFiles/paavo.dir/src/Sprite.cpp.o.d -o CMakeFiles/paavo.dir/src/Sprite.cpp.o -c /home/matt/Programming/projects/games/paavo/src/Sprite.cpp
+
+CMakeFiles/paavo.dir/src/Sprite.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/paavo.dir/src/Sprite.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/matt/Programming/projects/games/paavo/src/Sprite.cpp > CMakeFiles/paavo.dir/src/Sprite.cpp.i
+
+CMakeFiles/paavo.dir/src/Sprite.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/paavo.dir/src/Sprite.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/matt/Programming/projects/games/paavo/src/Sprite.cpp -o CMakeFiles/paavo.dir/src/Sprite.cpp.s
+
+CMakeFiles/paavo.dir/src/Input.cpp.o: CMakeFiles/paavo.dir/flags.make
+CMakeFiles/paavo.dir/src/Input.cpp.o: /home/matt/Programming/projects/games/paavo/src/Input.cpp
+CMakeFiles/paavo.dir/src/Input.cpp.o: CMakeFiles/paavo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/matt/Programming/projects/games/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/paavo.dir/src/Input.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/paavo.dir/src/Input.cpp.o -MF CMakeFiles/paavo.dir/src/Input.cpp.o.d -o CMakeFiles/paavo.dir/src/Input.cpp.o -c /home/matt/Programming/projects/games/paavo/src/Input.cpp
+
+CMakeFiles/paavo.dir/src/Input.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/paavo.dir/src/Input.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/matt/Programming/projects/games/paavo/src/Input.cpp > CMakeFiles/paavo.dir/src/Input.cpp.i
+
+CMakeFiles/paavo.dir/src/Input.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/paavo.dir/src/Input.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/matt/Programming/projects/games/paavo/src/Input.cpp -o CMakeFiles/paavo.dir/src/Input.cpp.s
+
+CMakeFiles/paavo.dir/src/Player.cpp.o: CMakeFiles/paavo.dir/flags.make
+CMakeFiles/paavo.dir/src/Player.cpp.o: /home/matt/Programming/projects/games/paavo/src/Player.cpp
+CMakeFiles/paavo.dir/src/Player.cpp.o: CMakeFiles/paavo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/matt/Programming/projects/games/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/paavo.dir/src/Player.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/paavo.dir/src/Player.cpp.o -MF CMakeFiles/paavo.dir/src/Player.cpp.o.d -o CMakeFiles/paavo.dir/src/Player.cpp.o -c /home/matt/Programming/projects/games/paavo/src/Player.cpp
+
+CMakeFiles/paavo.dir/src/Player.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/paavo.dir/src/Player.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/matt/Programming/projects/games/paavo/src/Player.cpp > CMakeFiles/paavo.dir/src/Player.cpp.i
+
+CMakeFiles/paavo.dir/src/Player.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/paavo.dir/src/Player.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/matt/Programming/projects/games/paavo/src/Player.cpp -o CMakeFiles/paavo.dir/src/Player.cpp.s
 
 # Object files for target paavo
 paavo_OBJECTS = \
-"CMakeFiles/paavo.dir/src/main.cpp.o"
+"CMakeFiles/paavo.dir/src/main.cpp.o" \
+"CMakeFiles/paavo.dir/src/Body.cpp.o" \
+"CMakeFiles/paavo.dir/src/Sprite.cpp.o" \
+"CMakeFiles/paavo.dir/src/Input.cpp.o" \
+"CMakeFiles/paavo.dir/src/Player.cpp.o"
 
 # External object files for target paavo
 paavo_EXTERNAL_OBJECTS =
 
 paavo: CMakeFiles/paavo.dir/src/main.cpp.o
+paavo: CMakeFiles/paavo.dir/src/Body.cpp.o
+paavo: CMakeFiles/paavo.dir/src/Sprite.cpp.o
+paavo: CMakeFiles/paavo.dir/src/Input.cpp.o
+paavo: CMakeFiles/paavo.dir/src/Player.cpp.o
 paavo: CMakeFiles/paavo.dir/build.make
 paavo: /home/matt/libs/raylib/install/lib/libraylib.a
 paavo: CMakeFiles/paavo.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/matt/Programming/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable paavo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/matt/Programming/projects/games/paavo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable paavo"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/paavo.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -106,6 +170,6 @@ CMakeFiles/paavo.dir/clean:
 .PHONY : CMakeFiles/paavo.dir/clean
 
 CMakeFiles/paavo.dir/depend:
-	cd /home/matt/Programming/paavo/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/matt/Programming/paavo /home/matt/Programming/paavo /home/matt/Programming/paavo/build /home/matt/Programming/paavo/build /home/matt/Programming/paavo/build/CMakeFiles/paavo.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/matt/Programming/projects/games/paavo/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/matt/Programming/projects/games/paavo /home/matt/Programming/projects/games/paavo /home/matt/Programming/projects/games/paavo/build /home/matt/Programming/projects/games/paavo/build /home/matt/Programming/projects/games/paavo/build/CMakeFiles/paavo.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/paavo.dir/depend
 

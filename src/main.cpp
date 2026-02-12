@@ -1,6 +1,11 @@
 #include "raylib.h"
+#include <cmath>
+#include <ctime>
 #include <raymath.h>
 
+#include "Player.h"
+
+float scale = 4;
 
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -8,30 +13,22 @@ int main(void) {
   MaximizeWindow();
   SetTargetFPS(GetMonitorRefreshRate(0));
 
-  Texture2D player_texture = LoadTexture("assets/entities/player/player.png");
-  Vector2 pos = {0, 0};
-  float speed = 300.f;
+  Player *player = new Player();
 
   while (!WindowShouldClose()) {
     float deltaTime = GetFrameTime();
 
-    Vector2 dir = {
-      (float) IsKeyDown(KEY_F) - IsKeyDown(KEY_S),
-      (float) IsKeyDown(KEY_D) - IsKeyDown(KEY_E)
-    };
-    dir = Vector2Normalize(dir);
-    pos = Vector2Add(pos, Vector2Scale(dir, speed * deltaTime));
+    player->update(deltaTime);
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawTextureEx(player_texture, pos, 0, 4.f, RAYWHITE);
+    player->draw();
 
     DrawFPS(0, 0);
     EndDrawing();
   }
   
-  UnloadTexture(player_texture);
   CloseWindow();
   return 0;
 }

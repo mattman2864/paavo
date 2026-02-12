@@ -1,4 +1,12 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/paavo.dir/src/Body.cpp.o"
+  "CMakeFiles/paavo.dir/src/Body.cpp.o.d"
+  "CMakeFiles/paavo.dir/src/Input.cpp.o"
+  "CMakeFiles/paavo.dir/src/Input.cpp.o.d"
+  "CMakeFiles/paavo.dir/src/Player.cpp.o"
+  "CMakeFiles/paavo.dir/src/Player.cpp.o.d"
+  "CMakeFiles/paavo.dir/src/Sprite.cpp.o"
+  "CMakeFiles/paavo.dir/src/Sprite.cpp.o.d"
   "CMakeFiles/paavo.dir/src/main.cpp.o"
   "CMakeFiles/paavo.dir/src/main.cpp.o.d"
   "paavo"

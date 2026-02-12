@@ -1,1 +1,0 @@
-/usr/bin/cc -Wl,--dependency-file=CMakeFiles/MyRaylibProject.dir/link.d CMakeFiles/MyRaylibProject.dir/src/main.c.o -o MyRaylibProject  -Wl,-rpath,/usr/local/lib64 /usr/local/lib64/libraylib.so.5.5.0 -lm -lpthread -ldl -lrt
