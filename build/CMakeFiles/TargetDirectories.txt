@@ -1,3 +1,0 @@
-/home/matt/Programming/projects/games/paavo/build/CMakeFiles/paavo.dir
-/home/matt/Programming/projects/games/paavo/build/CMakeFiles/edit_cache.dir
-/home/matt/Programming/projects/games/paavo/build/CMakeFiles/rebuild_cache.dir
