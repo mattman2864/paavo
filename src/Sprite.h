@@ -1,7 +1,7 @@
 #pragma once
 #include "raylib.h"
 
-class Player;  // Forward declaration
+class Entity;
 
 class Sprite {
 private:
@@ -11,6 +11,6 @@ public:
   bool showHitbox = false;
 
   Sprite(const char* filename);
-  void draw(Player* p, Camera2D* c);
+  void draw(Entity* p);
   void update(float dt);
 };

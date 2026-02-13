@@ -1,23 +1,23 @@
 #include "Sprite.h"
-#include "Player.h"
+#include "Entity.h"
 #include <raylib.h>
 
 Sprite::Sprite(const char* filename) {
   texture = LoadTexture(filename);
 }
 
-void Sprite::draw(Player* p, Camera2D* c) {
+void Sprite::draw(Entity* p) {
   float scale = 1;
   Body *b = p->getBody();
-  DrawTextureEx(texture, b->getPosition(), 0, scale, WHITE);
+  Vector2 pos = p->getBody()->getPosition();
+  Rectangle hb = p->getBody()->getHitbox();
+  Vector2 drawPosition = {
+    .x = pos.x - hb.width/2,
+    .y = pos.y - hb.height/2,
+  };
+  DrawTextureEx(texture, drawPosition, 0, scale, WHITE);
   if (this->showHitbox) {
-    Rectangle hitbox = {
-      .x = b->getPosition().x,
-      .y = b->getPosition().y,
-      .width = b->getHitbox().width,
-      .height = b->getHitbox().height
-    };
-    DrawRectangleLinesEx(hitbox, 3, RED);
+    DrawRectangleLinesEx(hb, 3, RED);
   }
 }
 

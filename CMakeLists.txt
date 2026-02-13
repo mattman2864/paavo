@@ -10,8 +10,8 @@ add_executable(paavo
     src/main.cpp
     src/Body.cpp
     src/Sprite.cpp
-    src/Input.cpp
-    src/Player.cpp
+    src/Control.cpp
+    src/Entity.cpp
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
