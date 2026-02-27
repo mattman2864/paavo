@@ -28,6 +28,7 @@ int main(void) {
       new Sprite("assets/entities/star/star.png")
       );
 
+
   Camera2D cam = {
     .offset = {-(float)GetMonitorWidth(0)/2, -(float)GetMonitorHeight(0)/2},
     .target = player->getBody()->getPosition(),
@@ -45,7 +46,7 @@ int main(void) {
     cam.target = player->getBody()->getPosition();
 
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground({.r = 200, .g = 200, .b = 200});
 
     BeginMode2D(cam);
 
@@ -54,7 +55,7 @@ int main(void) {
 
     EndMode2D();
 
-    DrawFPS(0, 0);
+    DrawFPS(5, 5);
     EndDrawing();
   }
 

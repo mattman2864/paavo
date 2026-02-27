@@ -21,5 +21,5 @@ void KeyboardControl::update(Entity* entity) {
 }
 
 void WalkRightControl::update(Entity* entity) {
-  entity->getBody()->setVelocity({(float)cos(GetTime()) * 200.f, -(float)sin(GetTime()) * 200.f});
+  entity->getBody()->setVelocity({100.f, (float)sin(GetTime()*8) * 200.f});
 };
