@@ -3,10 +3,11 @@
 #include "Sprite.h"
 #include "raylib.h"
 #include <cmath>
+#include <cstdlib>
 #include <ctime>
 #include <raymath.h>
-
 #include "Entity.h"
+#include "World.h"
 
 float scale = 4;
 
@@ -19,15 +20,20 @@ int main(void) {
   Entity *player = new Entity(
       new KeyboardControl(DEFAULT_KB),
       new Body({0, 0}, {.x = -16, .y = -32, .width = 32, .height = 64}),
-      new Sprite("assets/entities/player/player.png")
+      new Sprite("assets/entities/player/player.png"),
+      "Player 1"
       );
 
   Entity *enemy = new Entity(
       new WalkRightControl(),
       new Body({0, 0}, {.x = -8, .y = -8, .width = 16, .height = 16}),
-      new Sprite("assets/entities/star/star.png")
+      new Sprite("assets/entities/star/star.png"),
+      "Enemy 1"
       );
 
+  World *world = new World();
+  world->addEntity(player);
+  world->addEntity(enemy);
 
   Camera2D cam = {
     .offset = {-(float)GetMonitorWidth(0)/2, -(float)GetMonitorHeight(0)/2},
@@ -39,8 +45,7 @@ int main(void) {
   while (!WindowShouldClose()) {
     float deltaTime = GetFrameTime();
 
-    player->update(deltaTime);
-    enemy->update(deltaTime);
+    world->update(deltaTime);
 
     cam.offset = {(float)GetScreenWidth()/2, (float)GetScreenHeight()/2};
     cam.target = player->getBody()->getPosition();
@@ -50,8 +55,7 @@ int main(void) {
 
     BeginMode2D(cam);
 
-    player->draw();
-    enemy->draw();
+    world->draw(true);
 
     EndMode2D();
 

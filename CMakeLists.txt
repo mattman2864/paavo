@@ -12,6 +12,7 @@ add_executable(paavo
     src/Sprite.cpp
     src/Control.cpp
     src/Entity.cpp
+    src/World.cpp
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

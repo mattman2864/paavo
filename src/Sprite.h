@@ -8,9 +8,7 @@ private:
   Texture2D texture;
   
 public:
-  bool showHitbox = false;
-
   Sprite(const char* filename);
-  void draw(Entity* p);
+  void draw(Entity* p, bool debug = false);
   void update(float dt);
 };
