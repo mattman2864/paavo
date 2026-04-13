@@ -1,14 +1,23 @@
 CC = gcc
-CFLAGS = -Wall -O2
+CFLAGS = -Wall -O2 -Isrc
 LIBS = -lraylib -lm
 
-TARGET = game
-SRC = main.c
+TARGET = build/paavo
+SRC = $(wildcard src/*.c)
+OBJ = $(SRC:src/%.c=build/%.o)
 
-all: $(TARGET)
+all: build $(TARGET)
 
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(LIBS)
+build:
+	mkdir -p build
+
+build/%.o: src/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBS)
 
 clean:
-	rm -f $(TARGET)
+	rm -rf build
+
+.PHONY: all clean
