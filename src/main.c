@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "ship.h"
+#include <raymath.h>
 
 void draw_grid(Camera2D cam, int spacing, Color color) {
     Vector2 topLeft = GetScreenToWorld2D((Vector2){0, 0}, cam);
@@ -16,7 +17,8 @@ void draw_grid(Camera2D cam, int spacing, Color color) {
 
 int main(void) {
   SetConfigFlags(FLAG_FULLSCREEN_MODE);
-  InitWindow(GetMonitorWidth(0), GetMonitorHeight(0), "PAAVO");
+  InitWindow(800, 600, "PAAVO");
+  SetTargetFPS(144);
 
   ship_t* ship = create_ship((Vector2){ 0 }, 800, 10);
 
@@ -28,11 +30,17 @@ int main(void) {
   while (!WindowShouldClose()) {
     float dt = GetFrameTime();
 
-    move_ship(ship, (Vector2){GetMouseX(), GetMouseY()},
-        (Vector2){
+    if (IsKeyDown(KEY_SPACE)) {
+      ship->acc = 4000;
+    } else {
+      ship->acc = 800;
+    }
+
+    Vector2 dir = {
         IsKeyDown(KEY_E) - IsKeyDown(KEY_D),
-        IsKeyDown(KEY_F) - IsKeyDown(KEY_S)},
-        dt);
+        IsKeyDown(KEY_F) - IsKeyDown(KEY_S)};
+    move_ship(ship, (Vector2){GetMouseX(), GetMouseY()},
+        dir, dt);
 
     cam = (Camera2D){
       .offset = (Vector2){GetScreenWidth()/2., GetScreenHeight()/2.},

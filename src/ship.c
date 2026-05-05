@@ -57,10 +57,13 @@ void move_ship(ship_t* ship, Vector2 mousePosition, Vector2 dir, float dt) {
   Vector2 accel = Vector2Rotate(Vector2Scale(dir, ship->acc * power_percent),
                                 Vector2Angle((Vector2){1., 0}, forward));
   ship->vel = Vector2Add(ship->vel, Vector2Scale(accel, dt));
+  float damping = 1;
   if (Vector2Length(dir) == 0) {
-    ship->vel = Vector2Scale(ship->vel, 1.f - 2.f * dt);
+    damping *= 2;
     if (Vector2Length(ship->vel) < 20) ship->vel = (Vector2){ 0 };
   }
+
+  ship->vel = Vector2Scale(ship->vel, 1.f - damping * dt);
   ship->pos = Vector2Add(ship->pos, Vector2Scale(ship->vel, dt));
 }
 
