@@ -4,7 +4,7 @@
 #include <raymath.h>
 
 int main(void) {
-  SetConfigFlags(FLAG_FULLSCREEN_MODE);
+  SetConfigFlags(FLAG_BORDERLESS_WINDOWED_MODE);
   InitWindow(800, 600, "PAAVO");
   Penguin *p = malloc(sizeof(Penguin));
   p->x = 0;
@@ -18,7 +18,7 @@ int main(void) {
         IsKeyDown(KEY_F) - IsKeyDown(KEY_S),
         IsKeyDown(KEY_D) - IsKeyDown(KEY_E)
         };
-    movePenguin(p, Vector2Scale(move, 300.f * dt));
+    movePenguin(p, move, dt);
 
 
 

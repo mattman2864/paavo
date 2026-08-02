@@ -8,4 +8,4 @@ typedef struct {
 } Penguin;
 
 void drawPenguin(Penguin* penguin);
-void movePenguin(Penguin* penguin, Vector2 d);
+void movePenguin(Penguin* penguin, Vector2 d, float dt);
