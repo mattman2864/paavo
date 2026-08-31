@@ -1,0 +1,14 @@
+- entity
+  - position: Vector2
+  - movement
+    - a bunch of data: acc, vel, ...
+    - player input -> controls -> physics
+    - control_update()
+    - movement_update(control)
+    - entity_move(movement)
+  - graphics
+    - animation
+      - animation_load(filename, size, count)
+        - each animation in a separate file
+      - animation_update
+    - 
