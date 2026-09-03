@@ -1,14 +1,6 @@
-- entity
-  - position: Vector2
-  - movement
-    - a bunch of data: acc, vel, ...
-    - player input -> controls -> physics
-    - control_update()
-    - movement_update(control)
-    - entity_move(movement)
-  - graphics
-    - animation
-      - animation_load(filename, size, count)
-        - each animation in a separate file
-      - animation_update
-    - 
+- entity:
+  - position and size (rectangle/hitbox)
+  - graphics w/ animations
+  - movement/collision (player input or ai)
+  - other stats and abilities depending on implementation:
+    - health, effects/buffs, inventory, abilities, etc.
