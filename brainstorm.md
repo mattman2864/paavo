@@ -1,6 +1,0 @@
-- entity:
-  - position and size (rectangle/hitbox)
-  - graphics w/ animations
-  - movement/collision (player input or ai)
-  - other stats and abilities depending on implementation:
-    - health, effects/buffs, inventory, abilities, etc.
