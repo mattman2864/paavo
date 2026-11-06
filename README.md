@@ -1,4 +1,4 @@
-![Logo](assets/logo.png)
+# ![Logo](assets/logo.png)
 scavenger, han solo type
 explore space, get resources from planets and other ships, missions, etc
 sell and buy on galactic market
