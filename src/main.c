@@ -23,8 +23,32 @@
 #define SLIDE_TURN_RATE  0.5f
 #define SLIDE_STOP_SPEED 5.0f
 
-typedef struct { Vector2 pos, vel, facing; float heading; bool sliding; } Paavo;
-typedef struct { Paavo paavo; Camera2D cam; } Game;
+// items
+#define MAX_ITEMS 100
+#define INV_SIZE 30
+
+// inventory drawing
+#define SLOT_SIZE 56
+#define SLOT_GAP  6
+#define INV_COLS  10
+
+typedef struct {
+  Vector2 pos, vel;
+  char* name;
+  int count;
+} Item;
+
+typedef struct {
+  Vector2 pos, vel, facing;
+  float heading;
+  bool sliding;
+  Item *inv[INV_SIZE];
+} Paavo;
+
+typedef struct { Paavo paavo;
+  Camera2D cam;
+  Item *items[MAX_ITEMS];
+} Game;
 
 void debug_box(Vector2 pos, const char* fmt, ...) {
   char buf[512];
@@ -56,8 +80,110 @@ void debug_box(Vector2 pos, const char* fmt, ...) {
 }
 
 void paavo_draw_debug(const Paavo* p) {
-  debug_box(p->pos, "x: %.2f\ny: %.2f\nspd: %.1f\nsliding: %s",
+  debug_box(p->pos, "Paavo\nx: %.2f\ny: %.2f\nspd: %.1f\nsliding: %s",
             p->pos.x, p->pos.y, Vector2Length(p->vel), p->sliding ? "yes" : "no");
+}
+
+void item_draw_debug(const Item* i) {
+  if (i == NULL) return;
+  debug_box(i->pos, "%s\nx: %.2f\ny: %.2f\ncount: %d",
+            i->name, i->pos.x, i->pos.y, i->count);
+}
+
+void item_draw_icon(const char* name, Vector2 pos) {
+  float x = pos.x, y = pos.y;
+
+  if (strcmp(name, "fish") == 0) {
+    DrawEllipse((int)x, (int)y, 10, 6, GRAY);
+    DrawTriangle(
+        (Vector2){ x - 16, y - 6 },
+        (Vector2){ x - 16, y + 6 },
+        (Vector2){ x - 6,  y },
+        GRAY);
+  } else if (strcmp(name, "cheese") == 0) {
+  Color holes = (Color){ 214, 160, 0, 255 };
+
+  DrawTriangle(
+      (Vector2){ x + 12, y - 8 },
+      (Vector2){ x - 12, y + 8 },
+      (Vector2){ x + 12, y + 8 },
+      YELLOW);
+
+  DrawCircleV((Vector2){ x + 7, y + 2 }, 2.5f, holes);
+  DrawCircleV((Vector2){ x + 1, y + 4 }, 1.5f, holes);
+  DrawCircleV((Vector2){ x + 9, y - 2 }, 1.5f, holes);
+
+  DrawTriangleLines(
+      (Vector2){ x + 12, y - 8 },
+      (Vector2){ x - 12, y + 8 },
+      (Vector2){ x + 12, y + 8 },
+      holes);  } else if (strcmp(name, "snowball") == 0) {
+    DrawCircleV(pos, 5, RAYWHITE);
+
+  } else if (strcmp(name, "apple") == 0) {
+    DrawCircleV(pos, 8, RED);
+    DrawRectangle(x - 1, y - 12, 2, 5, BROWN);
+    DrawEllipse(x + 4, y - 10, 4, 2, GREEN);
+
+  } else if (strcmp(name, "coin") == 0) {
+    DrawCircleV(pos, 8, GOLD);
+    DrawCircleLinesV(pos, 5, ORANGE);
+
+  } else if (strcmp(name, "key") == 0) {
+    DrawRing((Vector2){ x - 9, y }, 2, 5, 0, 360, 16, GOLD);
+    DrawRectangle(x - 4, y - 1, 16, 3, GOLD);
+    DrawRectangle(x + 6, y + 2, 2, 4, GOLD);
+    DrawRectangle(x + 10, y + 2, 2, 3, GOLD);
+
+  } else if (strcmp(name, "gem") == 0) {
+    DrawPoly(pos, 4, 10, 0, PURPLE);
+    DrawPoly(pos, 4, 4, 0, ColorAlpha(WHITE, 0.5f));
+
+  } else if (strcmp(name, "mushroom") == 0) {
+    DrawRectangle(x - 3, y - 1, 6, 9, BEIGE);
+    DrawCircleSector((Vector2){ x, y - 1 }, 10, 180, 360, 16, RED);
+    DrawCircle(x - 4, y - 5, 2, RAYWHITE);
+    DrawCircle(x + 3, y - 7, 2, RAYWHITE);
+
+  } else if (strcmp(name, "potion") == 0) {
+    DrawCircleV((Vector2){ x, y + 3 }, 9, LIME);
+    DrawRectangle(x - 3, y - 9, 6, 6, LIGHTGRAY);
+    DrawRectangle(x - 4, y - 12, 8, 3, BROWN);
+    DrawCircle(x - 3, y + 1, 2, ColorAlpha(WHITE, 0.6f));
+
+  } else if (strcmp(name, "log") == 0) {
+    DrawRectangle(x - 12, y - 6, 24, 12, BROWN);
+    DrawEllipse(x + 12, y, 4, 6, BEIGE);
+    DrawEllipseLines(x + 12, y, 2, 3, BROWN);
+  }
+}
+void inv_draw(Item* const inv[]) {
+  int rows = (INV_SIZE + INV_COLS - 1) / INV_COLS;
+  int w = INV_COLS * SLOT_SIZE + (INV_COLS - 1) * SLOT_GAP;
+  int h = rows * SLOT_SIZE + (rows - 1) * SLOT_GAP;
+  int x0 = (GetScreenWidth() - w) / 2;
+  int y0 = GetScreenHeight() - h - 20;
+
+  for (int i = 0; i < INV_SIZE; i++) {
+    int col = i % INV_COLS, row = i / INV_COLS;
+    Rectangle r = {
+      x0 + col * (SLOT_SIZE + SLOT_GAP),
+      y0 + row * (SLOT_SIZE + SLOT_GAP),
+      SLOT_SIZE, SLOT_SIZE
+    };
+
+    DrawRectangleRec(r, ColorAlpha(GRAY, 0.2f));
+    DrawRectangleLinesEx(r, 2, ColorAlpha(RAYWHITE, 0.4f));
+
+    if (inv[i] == NULL) continue;
+
+    item_draw_icon(inv[i]->name,
+                   (Vector2){ r.x + r.width / 2, r.y + r.height / 2 - 4 });
+
+    const char* txt = TextFormat("%d", inv[i]->count);
+    int tw = MeasureText(txt, 14);
+    DrawText(txt, r.x + r.width - tw - 4, r.y + r.height - 16, 14, RAYWHITE);
+  }
 }
 
 static uint32_t hash2(int x, int y) {
@@ -94,6 +220,55 @@ static float angle_diff(float a, float b) {
   float d = fmodf(b - a + PI, 2.0f * PI);
   if (d < 0) d += 2.0f * PI;
   return d - PI;
+}
+
+int spawn_item(Game* g, Vector2 pos, char* name, int count) {
+  for (int i = 0; i < MAX_ITEMS; i++)  {
+    if (g->items[i] == NULL) {
+      Item* item = calloc(1, sizeof(Item));
+      item->pos = pos;
+      item->name = malloc(sizeof(char) * (strlen(name) + 1));
+      strcpy(item->name, name);
+      item->count = count;
+      g->items[i] = item;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int paavo_inv_add(Paavo* p, Item* item) {
+  for (int i = 0; i < INV_SIZE; i++) {
+    if (p->inv[i] == NULL) continue;
+    if (strcmp(item->name, p->inv[i]->name) == 0) {
+      p->inv[i]->count += item->count;
+      free(item->name);
+      free(item);
+      return 1;
+    }
+  }
+  for (int i = 0; i < INV_SIZE; i++) {
+    if (p->inv[i] == NULL) {
+      p->inv[i] = item;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+bool inv_full(Item* const inv[]) {
+  for (int i = 0; i < INV_SIZE; i++) {
+    if (inv[i] == NULL) return false;
+  }
+  return true;
+}
+
+bool inv_can_add(Item* const inv[], const Item* item) {
+  for (int i = 0; i < INV_SIZE; i++) {
+    if (inv[i] == NULL) return true;
+    if (strcmp(inv[i]->name, item->name) == 0) return true;
+  }
+  return false;
 }
 
 void paavo_update(Paavo* p, float dt) {
@@ -138,6 +313,25 @@ void update(Game* game, float dt) {
   Vector2 goal = game->paavo.pos;
   game->cam.target = Vector2Lerp(game->cam.target, goal, 1.0f - expf(-10.0f * dt));
   game->cam.offset = (Vector2){ GetRenderWidth() / 2.0f, GetRenderHeight() / 2.0f };
+
+  for (int i = 0; i < MAX_ITEMS; i++) {
+    Item* item = game->items[i];
+    if ((item == NULL) || !inv_can_add(game->paavo.inv, item)) continue;
+
+    float dist = Vector2Distance(game->paavo.pos, item->pos);
+    if (dist < 80 && dist > 0.001f) {
+        Vector2 dir = Vector2Normalize(Vector2Subtract(game->paavo.pos, item->pos));
+        item->vel = Vector2Add(item->vel, Vector2Scale(dir, 30.0f));
+    }
+
+    item->vel = Vector2Scale(item->vel, 0.95f);
+
+    item->pos = Vector2Add(item->pos, Vector2Scale(item->vel, dt));
+
+    if (Vector2Distance(item->pos, game->paavo.pos) < 10) {
+      if (paavo_inv_add(&game->paavo, item)) game->items[i] = NULL;
+    }
+  }
 }
 
 void draw(Game* game) {
@@ -147,12 +341,18 @@ void draw(Game* game) {
   }
 
   DrawCircleV(game->paavo.pos, 10, SKYBLUE);
+
+
+  for (int i = 0; i < MAX_ITEMS; i++) {
+    if (game->items[i] == NULL) continue;
+    item_draw_icon(game->items[i]->name, game->items[i]->pos);
+  }
 }
 
 int main(void) {
   SetConfigFlags(FLAG_BORDERLESS_WINDOWED_MODE);
   InitWindow(1920, 1080, "PAAVO");
-  SetTargetFPS(GetMonitorRefreshRate(0));
+  SetTargetFPS(GetMonitorRefreshRate(1));
 
   srand(time(NULL));
 
@@ -168,6 +368,16 @@ int main(void) {
     .paavo = paavo,
     .cam = cam
   };
+  spawn_item(&game, (Vector2){100, 500}, "fish", 11);
+  spawn_item(&game, (Vector2){100, 600}, "cheese", 15);
+  spawn_item(&game, (Vector2){200, 500}, "snowball", 16);
+  spawn_item(&game, (Vector2){200, 600}, "apple", 5);
+  spawn_item(&game, (Vector2){300, 600}, "coin", 25);
+  spawn_item(&game, (Vector2){300, 500}, "key", 1);
+  spawn_item(&game, (Vector2){400, 600}, "gem", 3);
+  spawn_item(&game, (Vector2){400, 500}, "mushroom", 8);
+  spawn_item(&game, (Vector2){500, 600}, "potion", 2);
+  spawn_item(&game, (Vector2){500, 500}, "log", 10);
 
   while (!WindowShouldClose()) {
     float dt = GetFrameTime();
@@ -182,9 +392,15 @@ int main(void) {
     draw(&game);
     if (DEBUG) {
       paavo_draw_debug(&game.paavo);
+
+      for (int i = 0; i < MAX_ITEMS; i++) {
+        item_draw_debug(game.items[i]);
+      }
     }
 
     EndMode2D();
+
+    inv_draw(game.paavo.inv);
 
     DrawFPS(0, 0);
 
