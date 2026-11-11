@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -O2 -Isrc
+CFLAGS = -Wall -O2 -Isrc -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 LIBS = -lraylib -lm
 
 TARGET = build/paavo

@@ -7,23 +7,24 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
+// debug
+#define DEBUG true
 #define DEBUG_FONT 16
 #define DEBUG_LINE (DEBUG_FONT + 2)
 #define DEBUG_PAD  8
 
-#define WALK_ACCEL      4000.0f
-#define WALK_DRAG       10.0f
-
-#define SLIDE_BOOST      450.0f
+// paavo movement
+#define WALK_ACCEL       5000.0f
+#define WALK_DRAG        15.0f
+#define SLIDE_BOOST      2.0f
 #define SLIDE_DRAG       0.6f
+#define SLIDE_TURN_RATE  0.5f
 #define SLIDE_STOP_SPEED 5.0f
-#define SLIDE_ACCEL      150.0f
 
-typedef enum { MODE_SHIP, MODE_FOOT } Mode;
-typedef struct { Vector2 pos, vel; float rot; } Ship;
-typedef struct { Vector2 pos, vel, facing; bool sliding; } Paavo;
-typedef struct { Mode mode; Ship ship; Paavo paavo; Camera2D cam; } Game;
+typedef struct { Vector2 pos, vel, facing; float heading; bool sliding; } Paavo;
+typedef struct { Paavo paavo; Camera2D cam; } Game;
 
 void debug_box(Vector2 pos, const char* fmt, ...) {
   char buf[512];
@@ -32,7 +33,6 @@ void debug_box(Vector2 pos, const char* fmt, ...) {
   vsnprintf(buf, sizeof buf, fmt, args);
   va_end(args);
 
-  // pass 1: split on newlines in place, find line count and widest line
   int lines = 0, max_w = 0;
   for (char* s = buf; s; ) {
     char* nl = strchr(s, '\n');
@@ -43,7 +43,6 @@ void debug_box(Vector2 pos, const char* fmt, ...) {
     s = nl ? nl + 1 : NULL;
   }
 
-  // pass 2: draw the box, then each line
   DrawRectangle(pos.x + 20, pos.y + 20,
                 max_w + 2 * DEBUG_PAD,
                 lines * DEBUG_LINE + 2 * DEBUG_PAD,
@@ -57,13 +56,10 @@ void debug_box(Vector2 pos, const char* fmt, ...) {
 }
 
 void paavo_draw_debug(const Paavo* p) {
-  debug_box(p->pos, "x: %.2f\ny: %.2f\nvel: %.1f\nsliding: %s",
+  debug_box(p->pos, "x: %.2f\ny: %.2f\nspd: %.1f\nsliding: %s",
             p->pos.x, p->pos.y, Vector2Length(p->vel), p->sliding ? "yes" : "no");
 }
 
-void ship_draw_debug(const Ship* s) {
-  debug_box(s->pos, "x: %.2f\ny: %.2f\nrot: %.2f", s->pos.x, s->pos.y, s->rot);
-}
 static uint32_t hash2(int x, int y) {
   uint32_t h = (uint32_t)x * 374761393u + (uint32_t)y * 668265263u;
   h = (h ^ (h >> 13)) * 1274126177u;
@@ -73,7 +69,6 @@ static uint32_t hash2(int x, int y) {
 void draw_stars(const Game* game) {
   const float cell = 120.0f;
 
-  // visible world rectangle, from the screen corners
   Vector2 tl = GetScreenToWorld2D((Vector2){ 0, 0 }, game->cam);
   Vector2 br = GetScreenToWorld2D((Vector2){ (float)GetScreenWidth(), (float)GetScreenHeight() }, game->cam);
 
@@ -95,51 +90,52 @@ void draw_stars(const Game* game) {
   }
 }
 
+static float angle_diff(float a, float b) {
+  float d = fmodf(b - a + PI, 2.0f * PI);
+  if (d < 0) d += 2.0f * PI;
+  return d - PI;
+}
+
 void paavo_update(Paavo* p, float dt) {
-  Vector2 move = Vector2Normalize((Vector2){
+  Vector2 move = Vector2Normalize((Vector2) {
       IsKeyDown(KEY_F) - IsKeyDown(KEY_S),
-      IsKeyDown(KEY_D) - IsKeyDown(KEY_E) });
+      IsKeyDown(KEY_D) - IsKeyDown(KEY_E)});
+  bool has_input = Vector2Length(move) > 0;
+  if (has_input) p->facing = move;
 
-  if (Vector2Length(move) > 0) p->facing = move;
-
-  // press: launch forward and start sliding
   if (IsKeyPressed(KEY_SPACE) && !p->sliding) {
-    p->vel = Vector2Add(p->vel, Vector2Scale(p->facing, SLIDE_BOOST));
+    p->heading = atan2f(p->facing.y, p->facing.x);
+    p->vel = Vector2Scale(p->facing, SLIDE_BOOST * Vector2Length(p->vel));
     p->sliding = true;
   }
 
-  // release: back on his feet
   if (p->sliding && !IsKeyDown(KEY_SPACE)) p->sliding = false;
 
-  float accel = p->sliding ? SLIDE_ACCEL : WALK_ACCEL;
-  float drag  = p->sliding ? SLIDE_DRAG  : WALK_DRAG;
+  if (p->sliding) {
+    if (has_input) {
+      float target = atan2f(move.y, move.x);
+      float diff   = angle_diff(p->heading, target);
+      float max_step = SLIDE_TURN_RATE * dt;
+      if (diff >  max_step) diff =  max_step;
+      if (diff < -max_step) diff = -max_step;
+      p->heading += diff;
+    }
 
-  p->vel = Vector2Add(p->vel, Vector2Scale(move, accel * dt));
-  p->vel = Vector2Scale(p->vel, expf(-drag * dt));
-  if (Vector2Length(p->vel) < SLIDE_STOP_SPEED) p->vel = (Vector2){ 0, 0 };
+    float speed = Vector2Length(p->vel) * expf(-SLIDE_DRAG * dt);
+    if (speed < SLIDE_STOP_SPEED) speed = 0;
+    p->vel = (Vector2){ cosf(p->heading) * speed, sinf(p->heading) * speed };
+  } else {
+    p->vel = Vector2Add(p->vel, Vector2Scale(move, WALK_ACCEL * dt));
+    p->vel = Vector2Scale(p->vel, expf(-WALK_DRAG * dt));
+  }
 
   p->pos = Vector2Add(p->pos, Vector2Scale(p->vel, dt));
 }
 
-void ship_update(Ship* s, float dt) {
-  (void)s; (void)dt;
-}
-
-
 void update(Game* game, float dt) {
-  if (IsKeyPressed(KEY_R)) {
-    game->mode = (game->mode == MODE_FOOT) ? MODE_SHIP : MODE_FOOT;
+  paavo_update(&game->paavo, dt);
 
-    game->paavo.vel = (Vector2){ 0, 0 };
-    game->paavo.sliding = false;
-  }
-
-  switch (game->mode) {
-    case MODE_FOOT: paavo_update(&game->paavo, dt); break;
-    case MODE_SHIP: ship_update(&game->ship, dt);    break;
-  }
-
-  Vector2 goal = (game->mode == MODE_FOOT) ? game->paavo.pos : game->ship.pos;
+  Vector2 goal = game->paavo.pos;
   game->cam.target = Vector2Lerp(game->cam.target, goal, 1.0f - expf(-10.0f * dt));
   game->cam.offset = (Vector2){ GetRenderWidth() / 2.0f, GetRenderHeight() / 2.0f };
 }
@@ -151,7 +147,6 @@ void draw(Game* game) {
   }
 
   DrawCircleV(game->paavo.pos, 10, SKYBLUE);
-  DrawCircleV(game->ship.pos, 20, PINK);
 }
 
 int main(void) {
@@ -159,15 +154,8 @@ int main(void) {
   InitWindow(1920, 1080, "PAAVO");
   SetTargetFPS(GetMonitorRefreshRate(0));
 
-  srand('h' + 'i');
+  srand(time(NULL));
 
-  Mode mode = MODE_FOOT;
-  Ship ship = (Ship) {
-    .pos = {0, 0},
-    .vel = {0, 0},
-    .rot = 0,
-
-  };
   Paavo paavo = (Paavo) {
     .pos = {0, 0},
     .vel = {0, 0},
@@ -177,8 +165,6 @@ int main(void) {
   cam.zoom = 1.0f;
   cam.offset = (Vector2){ GetRenderWidth() / 2.0f, GetRenderHeight() / 2.0f };
   Game game = (Game) {
-    .mode = mode,
-    .ship = ship,
     .paavo = paavo,
     .cam = cam
   };
@@ -194,8 +180,9 @@ int main(void) {
 
     ClearBackground(BLACK);
     draw(&game);
-    paavo_draw_debug(&game.paavo);
-    ship_draw_debug(&game.ship);
+    if (DEBUG) {
+      paavo_draw_debug(&game.paavo);
+    }
 
     EndMode2D();
 
