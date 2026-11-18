@@ -360,6 +360,20 @@ bool object_blocks(int tx, int ty, uint32_t seed) {
     ty >= p.ty && ty < p.ty + (int)d->size.y;
 }
 
+Color ColorInvert(Color c) {
+    return (Color){ 255 - c.r, 255 - c.g, 255 - c.b, c.a };
+}
+
+void draw_selection(const Game* g) {
+  Vector2 m = GetMousePosition();
+  m = GetScreenToWorld2D(m, g->cam);
+  int x = (int)floorf(m.x / TILE_SIZE);
+  int y = (int)floorf(m.y / TILE_SIZE);
+  Color c = ColorInvert(TILE_DEFS[tile_at(x, y, g->seed)].color);
+
+  DrawRectangleLines(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, c);
+}
+
 void draw_tiles(const Game* g) {
   Vector2 tl = GetScreenToWorld2D((Vector2){ 0, 0 }, g->cam);
   Vector2 br = GetScreenToWorld2D((Vector2){ (float)GetScreenWidth(), (float)GetScreenHeight() }, g->cam);
@@ -552,6 +566,7 @@ void draw(Game* game) {
   draw_stars(game);
   draw_tiles(game);
   draw_objects(game);
+  draw_selection(game);
   if (game->paavo.sliding) {
     DrawCircleLinesV(game->paavo.pos, 11, RAYWHITE);
   }
