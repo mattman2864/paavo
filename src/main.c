@@ -18,7 +18,7 @@
 #define DEBUG_LINE (DEBUG_FONT + 2)
 #define DEBUG_PAD  8
 
-// paavo movement
+// paavo movement/physics
 #define WALK_ACCEL          5000.0f
 #define WALK_DRAG           15.0f
 #define SLIDE_BOOST         2.0f
@@ -27,20 +27,21 @@
 #define SLIDE_STOP_SPEED    5.0f
 #define SLIDE_RELEASE_SPEED 400.0f
 
-// items
-#define MAX_ITEMS 100
-#define INV_SIZE 30
-#define MAGNET_RADIUS 80.0f
-#define MAGNET_ACCEL  1800.0f
-#define ITEM_DRAG     3.0f
+#define PAAVO_RADIUS 10.0f
+#define SLIDE_BOUNCE 0.6f
 
 // inventory drawing
 #define SLOT_SIZE 56
 #define SLOT_GAP  6
 #define INV_COLS  10
 
-// tiles
-#define TILE_SIZE 32
+
+// items
+#define MAX_ITEMS 100
+#define INV_SIZE 30
+#define MAGNET_RADIUS 80.0f
+#define MAGNET_ACCEL  1800.0f
+#define ITEM_DRAG     3.0f
 
 
 typedef enum { ITEM_FISH, ITEM_CHEESE, ITEM_SNOWBALL, ITEM_APPLE, ITEM_COIN,
@@ -62,21 +63,43 @@ static const ItemDef ITEM_DEFS[ITEM_COUNT] = {
   [ITEM_LOG]      = { "log",      99 },
 };
 
-typedef enum { TILE_WATER, TILE_ICE, TILE_SNOW, TILE_ROCK, TILE_COUNT } TileType;
-
-typedef struct { const char* name; float drag_multiplier; bool solid; Color color; } TileDef;
-
-static const TileDef TILE_DEFS[TILE_COUNT] = {
-
-  [TILE_WATER] = { "water", 1.0f, true,  { 30, 80, 160, 255 } },
-  [TILE_ICE]   = { "ice",   0.3f, false, { 170, 220, 240, 255 } },
-  [TILE_SNOW]  = { "snow",  1.0f, false, { 235, 240, 245, 255 } },
-  [TILE_ROCK]  = { "rock",  1.0f, true,  { 90, 90, 100, 255 } },
-
-};
-
 typedef struct { ItemType type; int count; } ItemStack;
 typedef struct { Vector2 pos, vel; ItemStack stack; bool active; } WorldItem;
+
+// tiles
+#define TILE_SIZE 32
+
+typedef struct { const char* name; float drag_multiplier; Color color; } TileDef;
+
+typedef enum { TILE_WATER, TILE_ICE, TILE_SNOW, TILE_ROCK, TILE_COUNT } TileType;
+
+static const TileDef TILE_DEFS[TILE_COUNT] = {
+  [TILE_WATER] = { "water", 1.0f, { 30, 80, 160, 255 } },
+  [TILE_ICE]   = { "ice",   0.3f, { 170, 220, 240, 255 } },
+  [TILE_SNOW]  = { "snow",  1.0f, { 235, 240, 245, 255 } },
+  [TILE_ROCK]  = { "rock",  1.0f, { 90, 90, 100, 255 } },
+};
+
+// objects
+#define TILE_BIT(t) (1u << (t))
+
+#define CELL 2
+#define SPAWN_CLEAR 6
+
+typedef enum { OBJECT_ROCK_LARGE, OBJECT_ROCK_SMALL, OBJECT_COUNT } ObjectType;
+
+typedef struct {
+  const char* name; Vector2 size; bool solid; Color color;
+  unsigned terrain;
+  int density;
+} ObjectDef;
+
+static const ObjectDef OBJECT_DEFS[OBJECT_COUNT] = {
+  [OBJECT_ROCK_LARGE] = { "large rock", {2, 2}, true,  { 130, 130, 140, 255 }, TILE_BIT(TILE_ROCK),  15 },
+  [OBJECT_ROCK_SMALL] = { "small rock", {1, 1}, true,  { 130, 130, 140, 255 }, TILE_BIT(TILE_ROCK),  25 },
+};
+
+typedef struct { ObjectType type; int tx, ty; } PlacedObject;
 
 typedef struct {
   Vector2 pos, vel, facing;
@@ -246,7 +269,6 @@ bool spawn_item(Game* g, Vector2 pos, ItemType type, int count) {
   return false;
 }
 
-// can at ast one more of this type fit?
 bool inv_can_add(const ItemStack inv[], ItemType type) {
   int max = ITEM_DEFS[type].max_stack;
   for (int i = 0; i < INV_SIZE; i++) {
@@ -275,7 +297,7 @@ static float lattice(int x, int y, uint32_t seed) {
 static float noise2(float x, float y, uint32_t seed) {
   int xi = (int)floorf(x), yi = (int)floorf(y);
   float fx = x - xi, fy = y - yi;
-  float u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy);   // smoothstep
+  float u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy);
   float a = lattice(xi,     yi,     seed), b = lattice(xi + 1, yi,     seed);
   float c = lattice(xi,     yi + 1, seed), d = lattice(xi + 1, yi + 1, seed);
   return Lerp(Lerp(a, b, u), Lerp(c, d, u), v);
@@ -298,6 +320,46 @@ TileType tile_at(int tx, int ty, uint32_t seed) {
   return TILE_ROCK;
 }
 
+static int floor_div(int a, int b) {
+  int q = a / b;
+  return (a % b != 0 && (a < 0) != (b < 0)) ? q - 1 : q;
+}
+
+PlacedObject object_in_cell(int cx, int cy, uint32_t seed) {
+  const PlacedObject none = { OBJECT_COUNT, 0, 0 };
+  uint32_t h = hash3(cx, cy, seed ^ 0xA5A5A5A5u);
+
+  int roll = (h >> 16) % 100, acc = 0;
+  ObjectType type = OBJECT_COUNT;
+  for (int t = 0; t < OBJECT_COUNT; t++) {
+    acc += OBJECT_DEFS[t].density;
+    if (roll < acc) { type = t; break; }
+  }
+  if (type == OBJECT_COUNT) return none;
+
+  const ObjectDef* d = &OBJECT_DEFS[type];
+  int ow = (int)d->size.x, oh = (int)d->size.y;
+
+  int tx = cx * CELL + (int)((h >> 4) % (CELL - ow + 1));
+  int ty = cy * CELL + (int)((h >> 8) % (CELL - oh + 1));
+
+  if (abs(tx) < SPAWN_CLEAR && abs(ty) < SPAWN_CLEAR) return none;
+
+  for (int y = 0; y < oh; y++)
+    for (int x = 0; x < ow; x++)
+      if (!(d->terrain & TILE_BIT(tile_at(tx + x, ty + y, seed)))) return none;
+
+  return (PlacedObject){ type, tx, ty };
+}
+
+bool object_blocks(int tx, int ty, uint32_t seed) {
+  PlacedObject p = object_in_cell(floor_div(tx, CELL), floor_div(ty, CELL), seed);
+  if (p.type == OBJECT_COUNT || !OBJECT_DEFS[p.type].solid) return false;
+  const ObjectDef* d = &OBJECT_DEFS[p.type];
+  return tx >= p.tx && tx < p.tx + (int)d->size.x &&
+    ty >= p.ty && ty < p.ty + (int)d->size.y;
+}
+
 void draw_tiles(const Game* g) {
   Vector2 tl = GetScreenToWorld2D((Vector2){ 0, 0 }, g->cam);
   Vector2 br = GetScreenToWorld2D((Vector2){ (float)GetScreenWidth(), (float)GetScreenHeight() }, g->cam);
@@ -308,6 +370,23 @@ void draw_tiles(const Game* g) {
     for (int tx = x0; tx <= x1; tx++)
       DrawRectangle(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE,
           TILE_DEFS[tile_at(tx, ty, g->seed)].color);
+}
+
+void draw_objects(const Game* g) {
+  Vector2 tl = GetScreenToWorld2D((Vector2){ 0, 0 }, g->cam);
+  Vector2 br = GetScreenToWorld2D((Vector2){ (float)GetScreenWidth(), (float)GetScreenHeight() }, g->cam);
+  int cx0 = floor_div((int)floorf(tl.x / TILE_SIZE), CELL), cx1 = floor_div((int)floorf(br.x / TILE_SIZE), CELL);
+  int cy0 = floor_div((int)floorf(tl.y / TILE_SIZE), CELL), cy1 = floor_div((int)floorf(br.y / TILE_SIZE), CELL);
+
+  for (int cy = cy0; cy <= cy1; cy++) {
+    for (int cx = cx0; cx <= cx1; cx++) {
+      PlacedObject p = object_in_cell(cx, cy, g->seed);
+      if (p.type == OBJECT_COUNT) continue;
+      const ObjectDef* d = &OBJECT_DEFS[p.type];
+      DrawRectangle(p.tx * TILE_SIZE + 2, p.ty * TILE_SIZE + 2,
+          (int)d->size.x * TILE_SIZE - 4, (int)d->size.y * TILE_SIZE - 4, d->color);
+    }
+  }
 }
 
 void draw_stars(const Game* game) {
@@ -357,6 +436,34 @@ int inv_add(ItemStack inv[], ItemType type, int count) {
   return count;
 }
 
+
+static bool tile_blocked(int tx, int ty, uint32_t seed) {
+  return object_blocks(tx, ty, seed);
+}
+
+static bool move_axis(Vector2* pos, float v, bool x_axis, float dt, uint32_t seed) {
+  const float R = PAAVO_RADIUS;
+  float* p = x_axis ? &pos->x : &pos->y;
+  float* o = x_axis ? &pos->y : &pos->x;
+
+  *p += v * dt;
+
+  int a0 = (int)floorf((*p - R) / TILE_SIZE), a1 = (int)floorf((*p + R) / TILE_SIZE);
+  int b0 = (int)floorf((*o - R) / TILE_SIZE), b1 = (int)floorf((*o + R) / TILE_SIZE);
+
+  for (int a = a0; a <= a1; a++) {
+    for (int b = b0; b <= b1; b++) {
+      int tx = x_axis ? a : b, ty = x_axis ? b : a;
+      if (!tile_blocked(tx, ty, seed)) continue;
+
+      if (v > 0)      *p = a * TILE_SIZE - R - 0.001f;
+      else if (v < 0) *p = (a + 1) * TILE_SIZE + R;
+      return true;
+    }
+  }
+  return false;
+}
+
 void paavo_update(Paavo* p, uint32_t seed, float dt) {
   Vector2 move = Vector2Normalize((Vector2) {
       IsKeyDown(KEY_F) - IsKeyDown(KEY_S),
@@ -396,7 +503,20 @@ void paavo_update(Paavo* p, uint32_t seed, float dt) {
     p->vel = Vector2Scale(p->vel, expf(-WALK_DRAG * grip * dt));
   }
 
-  p->pos = Vector2Add(p->pos, Vector2Scale(p->vel, dt));
+  bool hit_x = move_axis(&p->pos, p->vel.x, true,  dt, seed);
+  bool hit_y = move_axis(&p->pos, p->vel.y, false, dt, seed);
+
+  if (hit_x || hit_y) {
+    if (p->sliding) {
+      if (hit_x) p->heading = PI - p->heading;
+      if (hit_y) p->heading = -p->heading;
+      float speed = Vector2Length(p->vel) * SLIDE_BOUNCE;
+      p->vel = (Vector2){ cosf(p->heading) * speed, sinf(p->heading) * speed };
+    } else {
+      if (hit_x) p->vel.x = 0;
+      if (hit_y) p->vel.y = 0;
+    }
+  }
 }
 
 void update(Game* game, float dt) {
@@ -413,7 +533,6 @@ void update(Game* game, float dt) {
     float dist = Vector2Distance(game->paavo.pos, it->pos);
     bool can_pick = inv_can_add(game->paavo.inv, it->stack.type);
 
-    // only items Paavo has room for get puld toward him
     if (can_pick && dist < MAGNET_RADIUS && dist > 0.001f) {
       Vector2 dir = Vector2Normalize(Vector2Subtract(game->paavo.pos, it->pos));
       it->vel = Vector2Add(it->vel, Vector2Scale(dir, MAGNET_ACCEL * dt));
@@ -423,7 +542,6 @@ void update(Game* game, float dt) {
     it->pos = Vector2Add(it->pos, Vector2Scale(it->vel, dt));
 
     if (can_pick && dist < 10) {
-      // inv_add returns how many did NOT fit; those stay on the ground
       it->stack.count = inv_add(game->paavo.inv, it->stack.type, it->stack.count);
       if (it->stack.count == 0) it->active = false;
     }
@@ -433,6 +551,7 @@ void update(Game* game, float dt) {
 void draw(Game* game) {
   draw_stars(game);
   draw_tiles(game);
+  draw_objects(game);
   if (game->paavo.sliding) {
     DrawCircleLinesV(game->paavo.pos, 11, RAYWHITE);
   }
@@ -449,7 +568,6 @@ void draw(Game* game) {
 int main(void) {
   SetConfigFlags(FLAG_BORDERLESS_WINDOWED_MODE);
   InitWindow(1920, 1080, "PAAVO");
-  SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
   srand(time(NULL));
 
@@ -464,14 +582,14 @@ int main(void) {
   Game game = (Game) {
     .paavo = paavo,
     .cam = cam,
-    .seed = 1337
+    .seed = 69420
   };
   spawn_item(&game, (Vector2){100, 500}, ITEM_FISH,     11);
   spawn_item(&game, (Vector2){100, 600}, ITEM_CHEESE,   15);
   spawn_item(&game, (Vector2){200, 500}, ITEM_SNOWBALL, 24);
   spawn_item(&game, (Vector2){200, 600}, ITEM_APPLE,     5);
-  spawn_item(&game, (Vector2){300, 600}, ITEM_COIN,   5344);
-  spawn_item(&game, (Vector2){300, 500}, ITEM_KEY,       1);
+  spawn_item(&game, (Vector2){300, 600}, ITEM_COIN,    344);
+  spawn_item(&game, (Vector2){300, 500}, ITEM_KEY,       3);
   spawn_item(&game, (Vector2){400, 600}, ITEM_GEM,       3);
   spawn_item(&game, (Vector2){400, 500}, ITEM_MUSHROOM,  8);
   spawn_item(&game, (Vector2){500, 600}, ITEM_POTION,    2);
