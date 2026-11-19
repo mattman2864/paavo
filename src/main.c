@@ -312,8 +312,72 @@ static float fbm(float x, float y, uint32_t seed) {
   return sum / 0.9375f;
 }
 
+#define FLOE_SIZE    16.0f
+#define CRACK_HALF   0.9f
+#define ICE_RIM      4.0f
+#define STONE_DEPTH  8.0f
+#define FLOE_WARP    5.0f
+
+#define CALM_START  0.44f
+#define FLOE_START  0.52f
+#define FLOE_FULL   0.62f
+
+static float smoothstep(float a, float b, float x) {
+  float t = Clamp((x - a) / (b - a), 0.0f, 1.0f);
+  return t * t * (3.0f - 2.0f * t);
+}
+
+static void floe_site(int gx, int gy, uint32_t seed, float* sx, float* sy) {
+  uint32_t h = hash3(gx, gy, seed);
+  *sx = gx + 0.05f + 0.90f * ((h & 0xFFFF) / 65535.0f);
+  *sy = gy + 0.05f + 0.90f * (((h >> 16) & 0xFFFF) / 65535.0f);
+}
+
+static float crack_dist(float x, float y, uint32_t seed) {
+  float px = x / FLOE_SIZE, py = y / FLOE_SIZE;
+  int cx = (int)floorf(px), cy = (int)floorf(py);
+
+  float best = 1e9f, nx = 0, ny = 0;
+  int ngx = 0, ngy = 0;
+  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
+    float sx, sy;
+    floe_site(cx + i, cy + j, seed, &sx, &sy);
+    float d = (sx - px) * (sx - px) + (sy - py) * (sy - py);
+    if (d < best) { best = d; nx = sx; ny = sy; ngx = cx + i; ngy = cy + j; }
+  }
+
+  float edge = 1e9f;
+  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
+    if (cx + i == ngx && cy + j == ngy) continue;
+    float sx, sy;
+    floe_site(cx + i, cy + j, seed, &sx, &sy);
+    float dx = sx - nx, dy = sy - ny;
+    float len = sqrtf(dx * dx + dy * dy);
+    float d = (((nx + sx) * 0.5f - px) * dx + ((ny + sy) * 0.5f - py) * dy) / len;
+    if (d < edge) edge = d;
+  }
+  return edge * FLOE_SIZE;
+}
+
+TileType floe_tile(int tx, int ty, uint32_t seed, float t) {
+  float x = tx + 0.5f, y = ty + 0.5f;
+  float wx = x + (noise2(x * 0.12f, y * 0.12f, seed + 101) - 0.5f) * FLOE_WARP;
+  float wy = y + (noise2(x * 0.12f, y * 0.12f, seed + 202) - 0.5f) * FLOE_WARP;
+  float d = crack_dist(wx, wy, seed);
+
+  if (d < CRACK_HALF * t) return TILE_WATER;
+  if (d < ICE_RIM * t)    return TILE_ICE;
+  return TILE_SNOW;
+}
+
 TileType tile_at(int tx, int ty, uint32_t seed) {
+  float b = fbm(tx * 0.01f, ty * 0.01f, seed ^ 0x51ED270Bu);
+
+  float t = smoothstep(FLOE_START, FLOE_FULL, b);
+  if (t > 0.0f) return floe_tile(tx, ty, seed, t);
+
   float e = fbm(tx * 0.04f, ty * 0.04f, seed);
+  e = Lerp(e, 0.57f, smoothstep(CALM_START, FLOE_START, b));
   if (e < 0.30f) return TILE_WATER;
   if (e < 0.42f) return TILE_ICE;
   if (e < 0.72f) return TILE_SNOW;
@@ -614,6 +678,13 @@ int main(void) {
     float dt = GetFrameTime();
 
     update(&game, dt);
+
+    if (IsMouseButtonDown(3)) {
+      game.cam.zoom *= pow(0.5, dt);
+    }
+    if (IsMouseButtonDown(4)) {
+      game.cam.zoom *= pow(2, dt);
+    }
 
     BeginDrawing();
 
